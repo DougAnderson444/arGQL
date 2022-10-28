@@ -51,7 +51,9 @@ exports.fetchTxTag = exports.tx = exports.all = exports.run = exports.setEndpoin
 var axios_1 = require("axios");
 var tx_1 = require("./queries/tx");
 var GQL_ENDPOINT = "https://arweave.net/graphql"; //default
-var setEndpointUrl = function (full_GQL_Url) { return GQL_ENDPOINT = full_GQL_Url; };
+var setEndpointUrl = function (full_GQL_Url) {
+    return (GQL_ENDPOINT = full_GQL_Url);
+};
 exports.setEndpointUrl = setEndpointUrl;
 var run = function (query, variables) { return __awaiter(void 0, void 0, void 0, function () {
     var graphql, res;

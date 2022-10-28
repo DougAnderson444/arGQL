@@ -1,4 +1,5 @@
-import GQLResultInterface, { GQLEdgeInterface, GQLNodeInterface } from "./faces";
+import type GQLResultInterface from "./faces";
+import type { GQLEdgeInterface, GQLNodeInterface } from "./faces";
 export declare const setEndpointUrl: (full_GQL_Url: string) => string;
 export declare const run: (query: string, variables?: Record<string, unknown> | undefined) => Promise<GQLResultInterface>;
 export declare const all: (query: string, variables?: Record<string, unknown> | undefined) => Promise<GQLEdgeInterface[]>;

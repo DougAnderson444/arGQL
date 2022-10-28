@@ -1,7 +1,5 @@
-import type GQLResultInterface, {
-    GQLEdgeInterface,
-    GQLNodeInterface,
-} from "./faces"
+import type GQLResultInterface from "./faces"
+import type { GQLEdgeInterface, GQLNodeInterface } from "./faces"
 import axios from "axios"
 import txQuery from "./queries/tx"
 
