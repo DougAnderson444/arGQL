@@ -1,86 +1,83 @@
-import GQLResultInterface, {
-  GQLEdgeInterface,
-  GQLNodeInterface,
-} from "./faces";
-import axios from "axios";
-import txQuery from "./queries/tx";
+import type GQLResultInterface, {
+    GQLEdgeInterface,
+    GQLNodeInterface,
+} from "./faces"
+import axios from "axios"
+import txQuery from "./queries/tx"
 
 let GQL_ENDPOINT = "https://arweave.net/graphql" //default
-export const setEndpointUrl = (full_GQL_Url: string) => GQL_ENDPOINT = full_GQL_Url
+export const setEndpointUrl = (full_GQL_Url: string) =>
+    (GQL_ENDPOINT = full_GQL_Url)
 
 export const run = async (
-  query: string,
-  variables?: Record<string, unknown>
+    query: string,
+    variables?: Record<string, unknown>
 ): Promise<GQLResultInterface> => {
-  const graphql = JSON.stringify({
-    query,
-    variables,
-  });
+    const graphql = JSON.stringify({
+        query,
+        variables,
+    })
 
-  const { data: res } = await axios.post(
-    GQL_ENDPOINT,
-    graphql,
-    {
-      headers: {
-        "content-type": "application/json",
-      },
-    }
-  );
+    const { data: res } = await axios.post(GQL_ENDPOINT, graphql, {
+        headers: {
+            "content-type": "application/json",
+        },
+    })
 
-  return res;
-};
+    return res
+}
 
 export const all = async (
-  query: string,
-  variables?: Record<string, unknown>
+    query: string,
+    variables?: Record<string, unknown>
 ): Promise<GQLEdgeInterface[]> => {
-  let hasNextPage = true;
-  let edges: GQLEdgeInterface[] = [];
-  let cursor: string = "";
+    let hasNextPage = true
+    let edges: GQLEdgeInterface[] = []
+    let cursor: string = ""
 
-  while (hasNextPage) {
-    const res = (
-      await run(query, {
-        ...variables,
-        cursor,
-      })
-    ).data.transactions;
+    while (hasNextPage) {
+        const res = (
+            await run(query, {
+                ...variables,
+                cursor,
+            })
+        ).data.transactions
 
-    if (res.edges && res.edges.length) {
-      edges = edges.concat(res.edges);
-      cursor = res.edges[res.edges.length - 1].cursor;
+        if (res.edges && res.edges.length) {
+            edges = edges.concat(res.edges)
+            cursor = res.edges[res.edges.length - 1].cursor
+        }
+        hasNextPage = res.pageInfo.hasNextPage
     }
-    hasNextPage = res.pageInfo.hasNextPage;
-  }
 
-  return edges;
-};
+    return edges
+}
 
 export const tx = async (id: string): Promise<GQLNodeInterface> => {
-  const isBrowser: boolean = typeof window !== "undefined";
+    const isBrowser: boolean = typeof window !== "undefined"
 
-  if (isBrowser) {
-    const cache = JSON.parse(localStorage.getItem("gqlCache") || "{}");
-    if (id in cache) return JSON.parse(cache[id]);
-  }
+    if (isBrowser) {
+        const cache = JSON.parse(localStorage.getItem("gqlCache") || "{}")
+        if (id in cache) return JSON.parse(cache[id])
+    }
 
-  const res = await run(txQuery, { id });
+    const res = await run(txQuery, { id })
 
-  if (isBrowser && res.data.transaction.block) {
-    const cache = JSON.parse(localStorage.getItem("gqlCache") || "{}");
-    cache[id] = res.data.transaction;
-    localStorage.setItem("gqlCache", JSON.stringify(cache));
-  }
+    if (isBrowser && res.data.transaction.block) {
+        const cache = JSON.parse(localStorage.getItem("gqlCache") || "{}")
+        cache[id] = res.data.transaction
+        localStorage.setItem("gqlCache", JSON.stringify(cache))
+    }
 
-  return res.data.transaction;
-};
+    return res.data.transaction
+}
 
 export const fetchTxTag = async (
-  id: string,
-  name: string
+    id: string,
+    name: string
 ): Promise<string | undefined> => {
-  const res = await tx(id);
+    const res = await tx(id)
 
-  const tag = res.tags.find((tag) => tag.name === name);
-  if (tag) return tag.value;
-};
+    const tag = res.tags.find((tag) => tag.name === name)
+    if (tag) return tag.value
+}
