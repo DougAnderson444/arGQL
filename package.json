@@ -1,20 +1,21 @@
 {
-  "name": "ar-gql",
-  "version": "0.0.6",
-  "author": "John Letey <johnletey@gmail.com>",
-  "repository": "https://github.com/johnletey/arGQL",
-  "license": "MIT",
-  "scripts": {
-    "build": "tsc",
-    "fmt": "prettier --write ."
-  },
-  "main": "dist/index",
-  "types": "dist/index",
-  "dependencies": {
-    "axios": "^0.27.2"
-  },
-  "devDependencies": {
-    "prettier": "^2.2.1",
-    "typescript": "^4.2.3"
-  }
+    "name": "ar-gql",
+    "version": "0.0.7",
+    "author": "John Letey <johnletey@gmail.com>",
+    "repository": "https://github.com/johnletey/arGQL",
+    "license": "MIT",
+    "scripts": {
+        "build": "tsc",
+        "fmt": "prettier --write ."
+    },
+    "main": "dist/index",
+    "module": "src/index",
+    "types": "dist/index",
+    "dependencies": {
+        "axios": "^0.27.2"
+    },
+    "devDependencies": {
+        "prettier": "^2.2.1",
+        "typescript": "^4.2.3"
+    }
 }
